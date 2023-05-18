@@ -1,12 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GACO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css" />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+    <link rel="stylesheet" href="./css/home.css">
 </head>
+
 <body>
-    
+    <main>
+        <div class="content">
+
+            <aside>
+                <div class="logo-content">
+                    <img src="./src/logo/logo.png" alt="">
+                </div>
+                <div class="options">
+
+                    <button class="btn">Facturar</button>
+                    <button class="btn">Facturas creadas</button>
+
+                </div>
+            </aside>
+
+            <section>
+                <div class="head">
+                    <div class="info-content">
+                        <div class="personal-info">
+                            <h2>Oscar Monterreal</h2>
+                            <p>Cajero oficial</p>
+                        </div>
+                        <div class="user-img">
+                            <img src="./src/logo/logo.png" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="section-body">
+                    <div class="articles-section">
+                        <div class="input-form">
+                            <label for="bar_code_input">Codigo de barra</label>
+                            <input type="text" id="bar_code_input">
+                            <span>Digite el codigo de barra</span>
+                        </div>
+                        <div class="table-article">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Cantidad</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_articles">
+                                    <tr>
+                                        <td>Cucaracha de mano 100% de plastico</td>
+                                        <td>50</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cucaracha de mano 100% de plastico</td>
+                                        <td>50</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cucaracha de mano 100% de plastico</td>
+                                        <td>50</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cucaracha de mano 100% de plastico</td>
+                                        <td>50</td>
+                                        <td>100</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>200</td>
+                                        <td>400</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="control-section">
+                        <div class="input-form">
+                            <label for="name_client">Nombre</label>
+                            <input type="text" id="name_client">
+                            <span>Nombre del cliente</span>
+                        </div>
+                        <div class="actions-button">
+
+                            <button>
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Insertar</span>
+                            </button>
+
+                            <button>
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span>Insertar</span>
+                            </button>
+
+                            <button>
+                                <i class="fa-solid fa-money-bill-1-wave"></i>
+                                <span>Insertar</span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
 </body>
+
 </html>
