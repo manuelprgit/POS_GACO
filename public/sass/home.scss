@@ -1,61 +1,168 @@
-
 //#region resert css
-html{
-	font-size: 62.5%;
+html {
+    font-size: 62.5%;
 }
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font: inherit;
-	vertical-align: baseline;
+
+/* width */
+::-webkit-scrollbar {
+    width: 2px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #9a9a9a;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 }
-img{
+
+img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 // Font Family
-button{
+button {
     font-family: 'Poppins', sans-serif;
 }
+
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
 }
+
 body {
-	line-height: 1;
+    line-height: 1;
 }
-ol, ul {
-	list-style: none;
+
+ol,
+ul {
+    list-style: none;
 }
-blockquote, q {
-	quotes: none;
+
+blockquote,
+q {
+    quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
 }
+
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
+
 //#endregion resert css
 
 //#region variables
@@ -64,29 +171,34 @@ $primary-color: #F9B318;
 $secondary-color: #F26332;
 $ps-color: #FBDB93;
 $ss-color: #FDB59C;
+$grey: #4A4A4A;
+
+$box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
 //#endregion variables
 
 //#region mixin
-@mixin flexBox($justify: null, $align: null, $gap: null, $direction: null){
+@mixin flexBox($justify: null, $align: null, $gap: null, $direction: null) {
     display: flex;
     justify-content: $justify;
     align-items: $align;
     gap: $gap;
     flex-direction: $direction;
 }
-@mixin grid($columns: null, $rows: null){
+
+@mixin grid($columns: null, $rows: null) {
     display: grid;
     grid-template-columns: $columns;
     grid-template-rows: $rows;
 }
+
 //#endregion mixin
 
-main{
+main {
     width: 100%;
     height: 100vh;
-    @include flexBox(center,center);
+    @include flexBox(center, center);
 
-    .content{
+    .content {
         background-color: $white;
         max-width: 1300px;
         width: 90%;
@@ -94,78 +206,236 @@ main{
         border-radius: 12px;
         @include flexBox();
 
-        aside{
-            width:  20%;
+        aside {
+            width: 20%;
             min-width: 320px;
             background-color: $primary-color;
             margin: 28px;
             border-radius: 12px;
-            .logo-content{
+
+            .logo-content {
                 @include grid();
                 place-items: center;
                 width: 100%;
                 padding: 37px;
             }
-            .options{
-                @include flexBox(null,center,null,column);
-                gap:46px;
+
+            .options {
+                @include flexBox(null, center, null, column);
+                gap: 46px;
                 margin-top: 40px;
-                button{
+
+                button {
                     width: 224px;
                     height: 70px;
-                    font-size: 1.1rem; 
+                    font-size: 1.1rem;
                     border-radius: 12px;
                     border: none;
                     background-color: $ps-color;
                     font-weight: 500;
-                    box-shadow: 2px 4px 4px rgba(0,0,0,0.25);
+                    box-shadow: $box-shadow;
                     cursor: pointer;
                 }
-                button:hover{
+
+                button:hover {
                     background-color: #ffe9b5;
                 }
-                button:active{
+
+                button:active {
                     background-color: #fff3d6;
                 }
             }
         }
 
-        section{
-            width:  80%;
+        section {
+            width: 80%;
             // min-width: 790px;
             margin: 28px;
             padding: 20px;
-            background-color:$secondary-color;
-            .head{
+            border-radius: 12px;
+            background-color: $secondary-color;
+
+            .head {
                 @include flexBox(end, center);
                 padding: 0 24px;
                 width: 100%;
                 height: 120px;
                 background-color: $ss-color;
-                .info-content{
-                    @include flexBox(null,center);
+                border-radius: 12px;
+                margin-bottom: 28px;
+
+                .info-content {
+                    @include flexBox(null, center);
                     gap: 24px;
-                    .personal-info{
-                        @include flexBox(null,end,8px,column);
-                        h2{
+
+                    .personal-info {
+                        @include flexBox(null, end, 8px, column);
+
+                        h2 {
                             font-weight: 500;
                         }
-                        p{
+
+                        p {
                             font-size: 0.9rem;
                         }
                     }
-                    .user-img{
+
+                    .user-img {
                         background-color: #EEEEEE;
-                        height: 80px;    
-                        width: 80px; 
+                        height: 80px;
+                        width: 80px;
                         overflow: hidden;
                         border-radius: 50px;
-                        img{
+
+                        img {
                             object-fit: contain;
+                        }
+                    }
+                }
+            }
+
+            .section-body {
+                @include flexBox(null,null,20px,null);
+                background-color: $ss-color;
+                border-radius: 12px;
+                height: 78%;
+                padding: 30px;
+                .articles-section{
+                    width: 70%;
+                   
+                    .table-article{
+                        background-color: $white;
+                        padding: 12px;
+                        width: 100%;
+                        border-radius: 8px;
+                        box-shadow: $box-shadow;
+                        height: 78%;
+                        position: relative;
+
+                        .thead{
+                            margin-bottom: 12px;
+                            .tr{
+                                display: flex;
+                                
+                                .th:nth-child(1){
+                                    width: 270px;
+                                }
+                                .th:nth-child(2){
+                                    width: 96px;
+                                }
+                                .th:nth-child(3){
+                                    width: 106px;
+                                }
+                            }
+                        }
+                        .tbody{
+                            max-height: 300px;
+                            margin-bottom: 12px;
+                            overflow-y: scroll;
+                            overflow-x: hidden;
+                            margin-top: 22px;
+
+                            .tr{
+                                margin-bottom: 8px;
+                                display: flex;
+                                gap: 8px;
+                                .td:nth-child(1){
+                                    width: 270px;
+                                }
+                                .td:nth-child(2){
+                                    width: 100px;
+                                }
+                                .td:nth-child(3){
+                                    width: 100px;
+                                }
+                            }
+                        }
+                        .tfoot{
+                            position: absolute;
+                            bottom: 16px;
+                            .tr{                                
+                                display: flex;
+                                gap: 8px;
+                                .tf:nth-child(1){
+                                    width: 240px;
+                                    font-weight: 600;
+                                }
+                                .tf:nth-child(2){
+                                    width: 128px;
+                                }
+                                .tf:nth-child(3){
+                                    width: 108px;
+                                }
+                            }
+                        }
+                    }
+                }
+                .control-section{
+                    width: 30%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .actions-button{
+                        display: flex;
+                        flex-direction: column;
+                        gap: 12px;
+                        button{
+                            width: 90px;
+                            height: 70px;
+                            border: none;
+                            border-radius: 8px;
+                            box-shadow: $box-shadow;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-direction: column;
+                            cursor: pointer;
+                            i{
+                                font-size: 20px
+                            }
+                        } 
+                        button:hover{
+                            background-color: #ccc
+                        }
+                        button:active{
+                            background-color: #b4b4b4
                         }
                     }
                 }
             }
         }
     }
+} 
+
+.input-form{
+    @include flexBox(null,null , 4px, column);
+    width: 230px;
+    margin-bottom: 12px;
+    label{
+        font-weight: 500;
+    }
+    input{
+        height: 10px;
+        padding: 12px;
+        border: none;
+        box-shadow: $box-shadow;
+        border-radius: 8px;
+        font-size: 18px;
+        outline: none;
+    }
+    span{
+        font-size: 14px;
+        color: $grey;
+    }
+}
+
+.text-right{
+    text-align: right !important;
+}
+.text-left{
+    text-align: left !important;
+}
+.text-center{
+    text-align: center !important;
 }

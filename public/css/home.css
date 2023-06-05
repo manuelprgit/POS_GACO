@@ -2,19 +2,107 @@ html {
   font-size: 62.5%;
 }
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #9a9a9a;
+}
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -35,8 +123,17 @@ button {
 }
 
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
   display: block;
 }
 
@@ -44,16 +141,20 @@ body {
   line-height: 1;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
   quotes: none;
 }
 
-blockquote:before, blockquote:after,
-q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
   content: "";
   content: none;
 }
@@ -119,6 +220,7 @@ main .content section {
   width: 80%;
   margin: 28px;
   padding: 20px;
+  border-radius: 12px;
   background-color: #F26332;
 }
 main .content section .head {
@@ -129,6 +231,8 @@ main .content section .head {
   width: 100%;
   height: 120px;
   background-color: #FDB59C;
+  border-radius: 12px;
+  margin-bottom: 28px;
 }
 main .content section .head .info-content {
   display: flex;
@@ -156,6 +260,148 @@ main .content section .head .info-content .user-img {
 }
 main .content section .head .info-content .user-img img {
   object-fit: contain;
+}
+main .content section .section-body {
+  display: flex;
+  gap: 20px;
+  background-color: #FDB59C;
+  border-radius: 12px;
+  height: 78%;
+  padding: 30px;
+}
+main .content section .section-body .articles-section {
+  width: 70%;
+}
+main .content section .section-body .articles-section .table-article {
+  background-color: #EEEEEE;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+  height: 78%;
+  position: relative;
+}
+main .content section .section-body .articles-section .table-article .thead {
+  margin-bottom: 12px;
+}
+main .content section .section-body .articles-section .table-article .thead .tr {
+  display: flex;
+}
+main .content section .section-body .articles-section .table-article .thead .tr .th:nth-child(1) {
+  width: 270px;
+}
+main .content section .section-body .articles-section .table-article .thead .tr .th:nth-child(2) {
+  width: 96px;
+}
+main .content section .section-body .articles-section .table-article .thead .tr .th:nth-child(3) {
+  width: 106px;
+}
+main .content section .section-body .articles-section .table-article .tbody {
+  max-height: 300px;
+  margin-bottom: 12px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-top: 22px;
+}
+main .content section .section-body .articles-section .table-article .tbody .tr {
+  margin-bottom: 8px;
+  display: flex;
+  gap: 8px;
+}
+main .content section .section-body .articles-section .table-article .tbody .tr .td:nth-child(1) {
+  width: 270px;
+}
+main .content section .section-body .articles-section .table-article .tbody .tr .td:nth-child(2) {
+  width: 100px;
+}
+main .content section .section-body .articles-section .table-article .tbody .tr .td:nth-child(3) {
+  width: 100px;
+}
+main .content section .section-body .articles-section .table-article .tfoot {
+  position: absolute;
+  bottom: 16px;
+}
+main .content section .section-body .articles-section .table-article .tfoot .tr {
+  display: flex;
+  gap: 8px;
+}
+main .content section .section-body .articles-section .table-article .tfoot .tr .tf:nth-child(1) {
+  width: 240px;
+  font-weight: 600;
+}
+main .content section .section-body .articles-section .table-article .tfoot .tr .tf:nth-child(2) {
+  width: 128px;
+}
+main .content section .section-body .articles-section .table-article .tfoot .tr .tf:nth-child(3) {
+  width: 108px;
+}
+main .content section .section-body .control-section {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+main .content section .section-body .control-section .actions-button {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+main .content section .section-body .control-section .actions-button button {
+  width: 90px;
+  height: 70px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+main .content section .section-body .control-section .actions-button button i {
+  font-size: 20px;
+}
+main .content section .section-body .control-section .actions-button button:hover {
+  background-color: #ccc;
+}
+main .content section .section-body .control-section .actions-button button:active {
+  background-color: #b4b4b4;
+}
+
+.input-form {
+  display: flex;
+  gap: 4px;
+  flex-direction: column;
+  width: 230px;
+  margin-bottom: 12px;
+}
+.input-form label {
+  font-weight: 500;
+}
+.input-form input {
+  height: 10px;
+  padding: 12px;
+  border: none;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  font-size: 18px;
+  outline: none;
+}
+.input-form span {
+  font-size: 14px;
+  color: #4A4A4A;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
 }
 
 /*# sourceMappingURL=home.css.map */
