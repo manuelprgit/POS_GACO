@@ -5,11 +5,17 @@
     bar_code_input.focus();
     let totalArticles = document.getElementById('totalArticles');    
     let totalPrice = document.getElementById('totalPrice');
+    let btnInsert = document.getElementById('btnInsert');
+    let btnDelete = document.getElementById('btnDelete');
+    let btnSend = document.getElementById('btnSend');
+
+    let itemsToInvoice = {};
+    let articleCounter = 0;
 
     let totalArt = 0;
     let totalPric = 0;
 
-    let articles
+    let articles;
     await fetch('http://localhost:3000/articulos')
         .then(res => {
             if (res.status >= 400) 'Arror al traer los articulos';
@@ -20,11 +26,19 @@
         })
 
 
-    let getArticleById = (barCode) => {
-        return articles.find(art => art.codigoBarra == barCode)
+    let getArticleById = (barCode) => articles.find(art => art.codigoBarra == barCode);
+
+    let calculateTotals = (quantity,price) => {
+
+      totalArt += quantity;
+      totalPric += price;
+
+      totalArticles.textContent = totalArt;
+      totalPrice.textContent = totalPric;
+      
     }
 
-    function renderRow(articles) { 
+    let renderRow = (articles) => { 
         
         let {ID, descripcion, precio} = articles;
         let row = `
@@ -37,6 +51,23 @@
 
         tableArticleBody.insertAdjacentHTML('afterbegin',row);
 
+        //TODO: Ver en donde poner la calculadora.
+        calculateTotals(1,precio);
+
+    }
+
+    let fillItemsToInvoice = (item) => {
+      
+        itemsToInvoice[articleCounter] = item;
+        articleCounter++;
+        console.log(itemsToInvoice);
+
+    }
+
+    let deleteArticleToInvoice = (counter) => {
+        console.log('delete')
+        console.log(itemsToInvoice[counter])    
+        delete itemsToInvoice[counter];
     }
 
     bar_code_input.addEventListener('change', e => {
@@ -46,10 +77,16 @@
         if (article) {  
             e.target.value = "";
             renderRow(article);
+            fillItemsToInvoice(article);
         } else {
             console.log('Articulo no encontrado')
             e.target.select();
         }
+    })
+
+    btnDelete.addEventListener('click',e=>{
+        deleteArticleToInvoice(articleCounter);
+        console.log(itemsToInvoice)
     })
 
 })()

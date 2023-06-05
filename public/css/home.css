@@ -294,7 +294,7 @@ main .content section .section-body .articles-section .table-article .thead .tr 
   width: 96px;
 }
 main .content section .section-body .articles-section .table-article .thead .tr .th:nth-child(3) {
-  width: 106px;
+  width: 120px;
 }
 main .content section .section-body .articles-section .table-article .tbody {
   max-height: 300px;
