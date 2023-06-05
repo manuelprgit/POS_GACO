@@ -306,6 +306,7 @@ main .content section .section-body .articles-section .table-article .tbody {
 main .content section .section-body .articles-section .table-article .tbody .tr {
   margin-bottom: 8px;
   display: flex;
+  padding: 4px 3px;
   gap: 8px;
 }
 main .content section .section-body .articles-section .table-article .tbody .tr .td:nth-child(1) {
@@ -334,6 +335,9 @@ main .content section .section-body .articles-section .table-article .tfoot .tr 
 }
 main .content section .section-body .articles-section .table-article .tfoot .tr .tf:nth-child(3) {
   width: 108px;
+}
+main .content section .section-body .articles-section .table-article.select .tbody .tr {
+  cursor: pointer;
 }
 main .content section .section-body .control-section {
   width: 30%;
@@ -390,6 +394,22 @@ main .content section .section-body .control-section .actions-button button:acti
 .input-form span {
   font-size: 14px;
   color: #4A4A4A;
+}
+
+.select-art, main .content section .section-body .articles-section .table-article.select .tbody .tr {
+  background: #e5dcd9;
+  border-radius: 6px;
+}
+
+.article-selected {
+  background: #fdb59c !important;
+  border-radius: 6px !important;
+}
+
+.disable {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .text-right {

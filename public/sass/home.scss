@@ -338,6 +338,7 @@ main {
                             .tr{
                                 margin-bottom: 8px;
                                 display: flex;
+                                padding: 4px 3px;
                                 gap: 8px;
                                 .td:nth-child(1){
                                     width: 270px;
@@ -366,6 +367,15 @@ main {
                                 .tf:nth-child(3){
                                     width: 108px;
                                 }
+                            }
+                        }
+                    }
+
+                    .table-article.select{
+                        .tbody{
+                            .tr{
+                                @extend .select-art;
+                                cursor: pointer;
                             }
                         }
                     }
@@ -428,6 +438,22 @@ main {
         font-size: 14px;
         color: $grey;
     }
+}
+
+.select-art{
+    background: #e5dcd9;
+    border-radius: 6px;
+}
+
+.article-selected{
+    background: #fdb59c !important;
+    border-radius: 6px !important;
+}
+
+.disable{
+    opacity: .6;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .text-right{

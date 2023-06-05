@@ -45,10 +45,10 @@
                     <div class="articles-section">
                         <div class="input-form">
                             <label for="bar_code_input">Codigo de barra</label>
-                            <input type="text" class="input" placeholder="0123456789" id="bar_code_input" autocomplete="off">
+                            <input type="text" class="input" placeholder="0123456789" id="bar_code_input" autocomplete="off" disabled>
                             <span>Digite el codigo de barra</span>
                         </div>
-                        <div class="table-article">
+                        <div class="table-article" id="tableArticle">
 
                             <!-- <div class="grid-table">
 
@@ -130,7 +130,7 @@
                     <div class="control-section">
                         <div class="input-form">
                             <label for="name_client">Nombre</label>
-                            <input type="text" id="name_client" autocomplete="off">
+                            <input type="text" id="name_client" autocomplete="off" disabled>
                             <span>Nombre del cliente</span>
                         </div>
                         <div class="actions-button">
@@ -140,12 +140,12 @@
                                 <span>Insertar</span>
                             </button>
 
-                            <button id="btnDelete">
+                            <button id="btnDelete" class="disable">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <span>Eliminar</span>
                             </button>
 
-                            <button id="btnSend">
+                            <button id="btnSend" class="disable">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 <span>Enviar</span>
                             </button>
