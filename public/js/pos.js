@@ -2,6 +2,7 @@
 
     let tableArticleBody = document.getElementById('tableArticleBody');
     let bar_code_input = document.getElementById('bar_code_input');
+    let name_client = document.getElementById('name_client');
     let totalArticles = document.getElementById('totalArticles');
     let totalPrice = document.getElementById('totalPrice');
     let btnInsert = document.getElementById('btnInsert');
@@ -11,11 +12,13 @@
 
     let itemsToInvoice = {};
     let articleCounter = 0;
+    let articlesSelected = [];
 
     let totalArt = 0;
     let totalPric = 0;
 
     let mode = 'NORMAL';
+    let btndltStatus = 'NORMAL';
 
     let articles;
     await fetch('http://localhost:3000/articulos')
@@ -35,8 +38,8 @@
         totalArt += quantity;
         totalPric += price;
 
-        totalArticles.textContent = totalArt;
-        totalPrice.textContent = totalPric;
+        totalArticles.textContent = formatter.format(totalArt);
+        totalPrice.textContent = formatter.format(totalPric);
 
     }
 
@@ -44,10 +47,10 @@
 
         let { ID, descripcion, precio } = articles;
         let row = `
-            <div class="tr" data-id="${ID}">
+            <div class="tr" data-id="${ID}" data-counter="${articleCounter}">
                 <div class="td">${descripcion}</div>
                 <div class="td text-center">1</div>
-                <div class="td text-right">${precio}</div>
+                <div class="td text-right">${formatter.format(precio)}</div>
             </div>
         `;
 
@@ -66,6 +69,20 @@
 
     }
 
+    let changeDltBtnStatus = (condition) => {
+
+        if(condition){
+            btnDelete.querySelector('i').classList.remove('fa-trash-can');
+            btnDelete.querySelector('i').classList.add('fa-x');
+            btnDelete.querySelector('span').textContent = 'Cancelar';
+        }else{
+            btnDelete.querySelector('i').classList.remove('fa-x');
+            btnDelete.querySelector('i').classList.add('fa-trash-can');
+            btnDelete.querySelector('span').textContent = 'Eliminar';
+        }
+      
+    }
+
     let deleteArticleToInvoice = (counter) => delete itemsToInvoice[counter];
 
     bar_code_input.addEventListener('change', e => {
@@ -74,8 +91,9 @@
 
         if (article) {
             e.target.value = "";
-            renderRow(article);
             fillItemsToInvoice(article);
+            renderRow(article);
+            btnDelete.classList.remove('disable');
         } else {
             console.log('Articulo no encontrado')
             e.target.select();
@@ -84,8 +102,43 @@
 
     btnDelete.addEventListener('click', e => {
 
-        
-        tableArticle.classList.add('select')
+        if(btndltStatus == 'DELETE'){
+
+            console.log(articlesSelected)
+            
+            if(articlesSelected.length > 0){
+                articlesSelected.forEach(article =>{
+                    deleteArticleToInvoice(article.getAttribute('data-counter'));
+                    article.remove();
+                });
+            }
+            console.log(itemsToInvoice)
+            tableArticle.classList.remove('select');
+            
+            changeDltBtnStatus(false);
+            
+            bar_code_input.classList.remove('disable');
+            name_client.classList.remove('disable');
+            btnSend.classList.remove('disable');
+            btndltStatus = 'NORMAL';
+            let list = tableArticleBody.querySelectorAll('.tr');
+
+            if(!list.length){
+                btnDelete.classList.add('disable');
+            }
+
+        }else{
+
+            changeDltBtnStatus(true);
+            
+            tableArticle.classList.add('select');
+            
+            bar_code_input.classList.add('disable');
+            name_client.classList.add('disable');
+            btnSend.classList.add('disable');
+            btndltStatus = 'DELETE';
+
+        }
 
         // deleteArticleToInvoice(articleCounter);
         // console.log(itemsToInvoice)
@@ -95,7 +148,6 @@
         
         if(mode == 'NORMAL'){
             btnInsert.classList.add('disable');     
-            btnDelete.classList.remove('disable');
             btnSend.classList.remove('disable');
             bar_code_input.disabled = false;
             name_client.disabled = false;
@@ -106,14 +158,24 @@
     });
 
     tableArticleBody.addEventListener('click',e=>{ 
-        if(e.target.matches('.td')){
+
+        if(e.target.closest('.tr') && tableArticle.classList.contains('select')){
             let row = e.target.closest('.tr');
             if(row.classList.contains('article-selected')){
                 row.closest('.tr').classList.remove('article-selected');
             }else{
                 row.closest('.tr').classList.add('article-selected');
             } 
+            
+            articlesSelected = tableArticleBody.querySelectorAll('.tr.article-selected');
+            
+            if(articlesSelected.length > 0){
+                changeDltBtnStatus(false);
+            }else{
+                changeDltBtnStatus(true);
+            }
         }
+
     });
 
 })()
