@@ -64,8 +64,7 @@
     let fillItemsToInvoice = (item) => {
 
         itemsToInvoice[articleCounter] = item;
-        articleCounter++;
-        console.log(itemsToInvoice);
+        articleCounter++; 
 
     }
 
@@ -91,28 +90,28 @@
 
         if (article) {
             e.target.value = "";
-            fillItemsToInvoice(article);
             renderRow(article);
+            fillItemsToInvoice(article);
             btnDelete.classList.remove('disable');
-        } else {
-            console.log('Articulo no encontrado')
+            btnSend.classList.remove('disable');
+        } else { 
             e.target.select();
         }
     });
 
-    btnDelete.addEventListener('click', e => {
-
+    btnDelete.addEventListener('click', e => { 
+        
         if(btndltStatus == 'DELETE'){
-
-            console.log(articlesSelected)
-            
-            if(articlesSelected.length > 0){
+             console.log(articlesSelected)
+            if(articlesSelected.length){
                 articlesSelected.forEach(article =>{
+                    // let attri = article.getAttribute('data-counter');
+                    console.log(article)
                     deleteArticleToInvoice(article.getAttribute('data-counter'));
                     article.remove();
                 });
-            }
-            console.log(itemsToInvoice)
+            } 
+
             tableArticle.classList.remove('select');
             
             changeDltBtnStatus(false);
@@ -125,6 +124,7 @@
 
             if(!list.length){
                 btnDelete.classList.add('disable');
+                btnSend.classList.add('disable');
             }
 
         }else{
@@ -148,7 +148,6 @@
         
         if(mode == 'NORMAL'){
             btnInsert.classList.add('disable');     
-            btnSend.classList.remove('disable');
             bar_code_input.disabled = false;
             name_client.disabled = false;
             bar_code_input.focus();
@@ -156,6 +155,12 @@
             mode = 'INSERT';
         }
     });
+
+    btnSend.addEventListener('click',e=>{
+        let invoiceList = Object.entries(itemsToInvoice); 
+        let result = invoiceList.map(article=> article[1])
+        console.log(result);
+    })
 
     tableArticleBody.addEventListener('click',e=>{ 
 
