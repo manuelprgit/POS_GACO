@@ -1,6 +1,7 @@
+import {config} from 'dotenv';
+
 const express = require('express');
 const app = express();
-import {config} from 'dotenv';
 config();
 const port = process.env.PORT;
 const path = require('path');
