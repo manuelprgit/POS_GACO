@@ -11,7 +11,7 @@ const dbSettings = {
     }
 }
 
-async function getConecetion(){
+async function getConnection(){
     try {
         const pool = await sql.connect(dbSettings);
         return pool;
@@ -19,4 +19,8 @@ async function getConecetion(){
         console.log(error)
     }
 }
-getConecetion();
+getConnection();
+
+export {
+    getConnection
+};

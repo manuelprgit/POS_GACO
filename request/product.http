@@ -1,0 +1,5 @@
+@api = http://localhost:4551
+
+GET {{api}}/product
+
+ 
