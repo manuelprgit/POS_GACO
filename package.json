@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "sass": "sass --watch ./public/sass/home.scss:./public/css/home.css",
-    "dev": "nodemon index.js"
+    "dev" : "nodemon index.js --exec babel-node"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +19,11 @@
     "mssql": "^9.1.1",
     "nodemon": "^2.0.22",
     "sass": "^1.62.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.22.5",
+    "@babel/core": "^7.22.5",
+    "@babel/node": "^7.22.5",
+    "@babel/preset-env": "^7.22.5"
   }
 }

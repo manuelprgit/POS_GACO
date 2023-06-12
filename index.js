@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
-const port = 4551;
+import {config} from 'dotenv';
+config();
+const port = process.env.PORT;
 const path = require('path');
 
 app.use(express.static(path.join(`${__dirname}/public`)));
