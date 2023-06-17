@@ -8,12 +8,43 @@
     <title>GACO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.css" />
     <link
-    href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="./css/home.css">
 </head>
 
 <body>
+    <div class="modal-user-content" id="modalUser">
+        <div class="modal-user">
+            <div class="input-content">
+                <label for="userSuperVisor">
+                    <span>Usuario</span>
+                    <div class="input-form-icon">
+                        <div class="icon-content">
+                            <span class="user"></span>
+                        </div>
+                        <select name="user" class="input-form" id="userSuperVisor">
+                            <option value="0">Seleccionar supervisor</option>
+                        </select>
+                    </div>
+                </label>
+                <label for="userPassword">
+                    <span>Contraseña</span>
+                    <div class="input-form-icon">
+                        <div class="icon-content">
+                            <span class="password"></span>
+                        </div>
+                        <input type="password" id='userPassword'  class="input-form">
+                    </div>
+                </label>
+                <div class="button-content">
+                    <button id="btnAccept" class="btn btn-success">Aceptar</button>
+                    <button id="btnCancel" class="btn btn-danger">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main>
         <div class="content">
 
@@ -45,7 +76,8 @@
                     <div class="articles-section">
                         <div class="input-form">
                             <label for="bar_code_input">Codigo de barra</label>
-                            <input type="text" class="input" placeholder="0123456789" id="bar_code_input" autocomplete="off" disabled>
+                            <input type="text" class="input" placeholder="0123456789" id="bar_code_input"
+                                autocomplete="off" disabled>
                             <span>Digite el codigo de barra</span>
                         </div>
                         <div class="table-article" id="tableArticle">
@@ -83,7 +115,7 @@
                                     <div class="tr">
                                         <div class="tf">total</div>
                                         <div class="tf text-center" id="totalArticles">0</div>
-                                        <div class="tf text-right" id="totalPrice" >$0.00</div>
+                                        <div class="tf text-right" id="totalPrice">$0.00</div>
                                     </div>
                                 </div>
                             </div>
@@ -155,9 +187,9 @@
                 </div>
             </section>
         </div>
-    </main>
-    <script src="/public/js/main.js"></script>
-    <script src="/public/js/pos.js"></script>
+    </main> 
+    <script src="/js/main.js"></script>
+    <script src="/js/pos.js"></script>
 </body>
 
 </html>

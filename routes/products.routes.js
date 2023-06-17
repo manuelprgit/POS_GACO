@@ -9,7 +9,7 @@ const baseUrl = '/api/product/';
 
 const router = Router();
 
-router.get(`${baseUrl}:productId`, getProductById);
+router.get(`${baseUrl}:barcode`, getProductById);
 
 
 // router.get(baseUrl, getProducts);
@@ -19,8 +19,6 @@ router.get(`${baseUrl}:productId`, getProductById);
 // router.post(baseUrl,postInvoice);
 
 // router.delete(baseUrl);
-
-
 
 
 

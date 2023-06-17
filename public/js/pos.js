@@ -8,146 +8,261 @@
     let btnInsert = document.getElementById('btnInsert');
     let btnDelete = document.getElementById('btnDelete');
     let btnSend = document.getElementById('btnSend');
-    let tableArticle = document.getElementById('tableArticle'); 
+    let tableArticle = document.getElementById('tableArticle');
+    let userSuperVisor = document.getElementById('userSuperVisor');
+    let btnAccept = document.getElementById('btnAccept');
+    let btnCancel = document.getElementById('btnCancel');
+    let modalUser = document.getElementById('modalUser');
 
     let itemsToInvoice = {};
     let articleCounter = 0;
     let articlesSelected = [];
 
+    let quantity = 1;
     let totalArt = 0;
     let totalPric = 0;
 
     let mode = 'NORMAL';
     let btndltStatus = 'NORMAL';
 
-    let articles;
-    await fetch('http://localhost:3000/articulos')
+    let baseURL = 'http://localhost:4551'
+
+    let getSupervisor = await fetch(`${baseURL}/api/user/superVisor`)
         .then(res => {
-            if (res.status >= 400) 'Arror al traer los articulos';
+            if (res.status >= 400) throw Error('Error al traer los super visores');
             return res.json();
         })
-        .then(res => {
-            articles = res;
-        })
 
+    let fillSelectSuperVisorSelect = (superVisors) => {
+        let fragment = document.createDocumentFragment();
+        for (let superVisor of superVisors) {
+            let option = document.createElement('option');
+            option.setAttribute('value', superVisor.NUMERO);
+            option.innerText = superVisor.USUARIOS;
+            fragment.append(option);
+        }
+        userSuperVisor.append(fragment)
 
-    let getArticleById = (barCode) => articles.find(art => art.codigoBarra == barCode);
+    }
+    fillSelectSuperVisorSelect(getSupervisor);
+
+    let articles;
+    let getArticleBarcode = async (barCode) => {
+        try {
+
+            return await fetch(`${baseURL}/api/product/${barCode}`).then(res => {
+                if (res.status >= 400) throw Error(`Error al traer articulo. Error ${res.status}`);
+                return res.json();
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     let calculateTotals = (quantity, price) => {
 
         totalArt += quantity;
-        totalPric += price;
+        totalPric += price * quantity;
 
         totalArticles.textContent = formatter.format(totalArt);
         totalPrice.textContent = formatter.format(totalPric);
 
     }
 
-    let renderRow = (articles) => {
+    let renderRow = (articles, quantity) => {
 
-        let { ID, descripcion, precio } = articles;
+        let { CODIGO, DESCRIPCION, PRECIO } = articles;
+
         let row = `
-            <div class="tr" data-id="${ID}" data-counter="${articleCounter}">
-                <div class="td">${descripcion}</div>
-                <div class="td text-center">1</div>
-                <div class="td text-right">${formatter.format(precio)}</div>
+            <div class="tr" data-id="${CODIGO}" data-counter="${articleCounter}">
+                <div class="td">${DESCRIPCION}</div>
+                <div class="td text-center">${quantity}</div>
+                <div class="td text-right">${formatter.format(PRECIO * quantity)}</div>
             </div>
         `;
 
         tableArticleBody.insertAdjacentHTML('afterbegin', row);
 
-        //TODO: Ver en donde poner la calculadora.
-        calculateTotals(1, precio);
+        calculateTotals(quantity, PRECIO);
 
     }
 
     let fillItemsToInvoice = (item) => {
 
         itemsToInvoice[articleCounter] = item;
-        articleCounter++; 
+        articleCounter++;
 
     }
 
     let changeDltBtnStatus = (condition) => {
 
-        if(condition){
+        if (condition) {
             btnDelete.querySelector('i').classList.remove('fa-trash-can');
             btnDelete.querySelector('i').classList.add('fa-x');
             btnDelete.querySelector('span').textContent = 'Cancelar';
-        }else{
+        } else {
             btnDelete.querySelector('i').classList.remove('fa-x');
             btnDelete.querySelector('i').classList.add('fa-trash-can');
             btnDelete.querySelector('span').textContent = 'Eliminar';
         }
-      
+
     }
 
     let deleteArticleToInvoice = (counter) => delete itemsToInvoice[counter];
 
-    bar_code_input.addEventListener('change', e => {
+    let checkIfHaveMoreAsterisk = (input) => {
 
-        let article = getArticleById(e.target.value)
+        let destructuringInput = input.split('');
+        let counterFlag = 0;
+        for (let i = 0; i < destructuringInput.length; i++) {
+            if (destructuringInput[i] === '*') {
+                counterFlag++;
+            }
+        }
+
+        if (counterFlag > 1) {
+            return true;
+        }
+        return false;
+    }
+
+    let validateUser = (user) => {
+
+    }
+
+    let showAcceptButton = () => {
+        return new Promise((resolve, reject) => {
+ 
+            modalUser.classList.add('show');
+
+            btnAccept.addEventListener('click', e => {
+                modalUser.classList.remove('show');
+
+                let userId = userSuperVisor.value;
+                let pass = userPassword.value;
+
+                let superVisorInfo = {
+                    userId,
+                    pass
+                }
+
+                fetch(`${baseURL}/api/user/validateSuperVisor`,{
+                    method: 'POST',
+                    body: JSON.stringify(superVisorInfo),
+                    headers: { "Content-Type": "application/json" }
+                })
+                    .then(res=>{
+                        if(res.status >= 400){
+                            console.log('Error al verificar el usuario')
+                            console.log(res);
+                        }
+                    })
+
+                resolve(true)
+            })
+
+            btnCancel.addEventListener('click', e => {
+                modalUser.classList.remove('show');
+                resolve(false)
+            })
+
+        })
+    }
+
+    bar_code_input.addEventListener('change', async e => {
+
+        let thisElement = e.target;
+        if (thisElement.classList.contains('wrong-input'))
+            thisElement.classList.remove('wrong-input');
+
+        if (thisElement.value.startsWith('*')) {
+
+            let hasMoreAsterisk = checkIfHaveMoreAsterisk(thisElement.value)
+
+            if (hasMoreAsterisk) {
+                console.log('Solo se acepta 1 asterisco');
+                thisElement.classList.add('wrong-input');
+
+                return;
+            }
+
+            quantity = (Number(thisElement.value.slice(1)) == 0)
+                ? 1 :
+                Number(thisElement.value.slice(1));
+            thisElement.value = "";
+            return;
+        }
+
+        let article = await getArticleBarcode(thisElement.value)
 
         if (article) {
-            e.target.value = "";
-            renderRow(article);
+            thisElement.value = "";
+            renderRow(article, quantity);
             fillItemsToInvoice(article);
             btnDelete.classList.remove('disable');
             btnSend.classList.remove('disable');
-        } else { 
-            e.target.select();
+            quantity = 1;
+        } else {
+            thisElement.classList.add('wrong-input');
+            thisElement.select();
         }
     });
 
-    btnDelete.addEventListener('click', e => { 
-        
-        if(btndltStatus == 'DELETE'){
-             console.log(articlesSelected)
-            if(articlesSelected.length){
-                articlesSelected.forEach(article =>{
+    btnDelete.addEventListener('click', async e => {
+
+
+        if (btndltStatus == 'DELETE') {
+            console.log(articlesSelected)
+            if (articlesSelected.length) {
+                articlesSelected.forEach(article => {
                     // let attri = article.getAttribute('data-counter');
                     console.log(article)
                     deleteArticleToInvoice(article.getAttribute('data-counter'));
                     article.remove();
                 });
-            } 
+            }
 
             tableArticle.classList.remove('select');
-            
+
             changeDltBtnStatus(false);
-            
+
             bar_code_input.classList.remove('disable');
             name_client.classList.remove('disable');
             btnSend.classList.remove('disable');
             btndltStatus = 'NORMAL';
             let list = tableArticleBody.querySelectorAll('.tr');
 
-            if(!list.length){
+            if (!list.length) {
                 btnDelete.classList.add('disable');
                 btnSend.classList.add('disable');
             }
 
-        }else{
+        } else {
+            let buttonResult = await showAcceptButton();
 
-            changeDltBtnStatus(true);
-            
-            tableArticle.classList.add('select');
-            
-            bar_code_input.classList.add('disable');
-            name_client.classList.add('disable');
-            btnSend.classList.add('disable');
-            btndltStatus = 'DELETE';
+            if (buttonResult) {
 
+                changeDltBtnStatus(true);
+
+                tableArticle.classList.add('select');
+
+                bar_code_input.classList.add('disable');
+                name_client.classList.add('disable');
+                btnSend.classList.add('disable');
+                btndltStatus = 'DELETE';
+            }
         }
+
 
         // deleteArticleToInvoice(articleCounter);
         // console.log(itemsToInvoice)
     });
 
-    btnInsert.addEventListener('click',e=>{
-        
-        if(mode == 'NORMAL'){
-            btnInsert.classList.add('disable');     
+    btnInsert.addEventListener('click', e => {
+        console.log('object')
+        if (mode == 'NORMAL') {
+            btnInsert.classList.add('disable');
             bar_code_input.disabled = false;
             name_client.disabled = false;
             bar_code_input.focus();
@@ -156,31 +271,38 @@
         }
     });
 
-    btnSend.addEventListener('click',e=>{
-        let invoiceList = Object.entries(itemsToInvoice); 
-        let result = invoiceList.map(article=> article[1])
+    btnSend.addEventListener('click', e => {
+        let invoiceList = Object.entries(itemsToInvoice);
+        let result = invoiceList.map(article => article[1])
         console.log(result);
     })
 
-    tableArticleBody.addEventListener('click',e=>{ 
+    tableArticleBody.addEventListener('click', e => {
 
-        if(e.target.closest('.tr') && tableArticle.classList.contains('select')){
+        if (e.target.closest('.tr') && tableArticle.classList.contains('select')) {
             let row = e.target.closest('.tr');
-            if(row.classList.contains('article-selected')){
+            if (row.classList.contains('article-selected')) {
                 row.closest('.tr').classList.remove('article-selected');
-            }else{
+            } else {
                 row.closest('.tr').classList.add('article-selected');
-            } 
-            
+            }
+
             articlesSelected = tableArticleBody.querySelectorAll('.tr.article-selected');
-            
-            if(articlesSelected.length > 0){
+
+            if (articlesSelected.length > 0) {
                 changeDltBtnStatus(false);
-            }else{
+            } else {
                 changeDltBtnStatus(true);
             }
         }
 
     });
+
+    btnAccept.addEventListener('click', e => {
+        showAcceptButton('hide')
+    })
+    btnCancel.addEventListener('click', e => {
+        showAcceptButton('hide')
+    })
 
 })()

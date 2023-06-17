@@ -164,6 +164,86 @@ table {
   border-spacing: 0;
 }
 
+.modal-user-content {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: 0.3s;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-user-content .modal-user {
+  border-radius: 8px;
+  background-color: white;
+  width: 30%;
+  transition: 0.3s;
+  overflow: hidden;
+  height: 0;
+}
+.modal-user-content .modal-user .input-content {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 22px;
+}
+.modal-user-content .modal-user .input-content label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.modal-user-content .modal-user .input-content .button-content {
+  display: flex;
+  gap: 20px;
+  flex-direction: row;
+}
+.modal-user-content .modal-user .input-content .button-content .btn {
+  width: 150px;
+  height: 44px;
+  border: none;
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2509803922);
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+}
+.modal-user-content .modal-user .input-content .button-content .btn-success {
+  background-color: #F9B318;
+}
+.modal-user-content .modal-user .input-content .button-content .btn-danger {
+  background-color: #F26332;
+}
+.modal-user-content .modal-user .input-content .button-content .btn-success:hover {
+  background-color: #eda60d;
+}
+.modal-user-content .modal-user .input-content .button-content .btn-danger:hover {
+  background-color: #cd4518;
+}
+.modal-user-content .input-form {
+  width: 269px;
+  height: 32px;
+  border: none;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3333333333);
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 18px;
+  box-sizing: border-box;
+}
+
+.modal-user-content.show {
+  background-color: rgba(74, 74, 74, 0.3137254902);
+  pointer-events: auto;
+}
+.modal-user-content.show .modal-user {
+  height: 40%;
+}
+
 main {
   width: 100%;
   height: 100vh;
@@ -422,6 +502,11 @@ main .content section .section-body .control-section .actions-button button:acti
 
 .text-center {
   text-align: center !important;
+}
+
+.wrong-input {
+  border: solid 2px red !important;
+  box-shadow: 0px 0px 5px rgba(255, 15, 15, 0.5) !important;
 }
 
 /*# sourceMappingURL=home.css.map */
