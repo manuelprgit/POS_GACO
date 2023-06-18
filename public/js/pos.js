@@ -176,6 +176,7 @@
         if (thisElement.classList.contains('wrong-input'))
             thisElement.classList.remove('wrong-input');
 
+
         if (thisElement.value.startsWith('*')) {
 
             let hasMoreAsterisk = checkIfHaveMoreAsterisk(thisElement.value)
@@ -194,18 +195,25 @@
             return;
         }
 
+        thisElement.disabled = true;
+
         let article = await getArticleBarcode(thisElement.value)
 
         if (article) {
-            thisElement.value = "";
             renderRow(article, quantity);
             fillItemsToInvoice(article);
             btnDelete.classList.remove('disable');
             btnSend.classList.remove('disable');
             quantity = 1;
+            thisElement.value = "";
+            thisElement.disabled = false;
+            thisElement.focus()
+
         } else {
             thisElement.classList.add('wrong-input');
             thisElement.select();
+            thisElement.disabled = false;
+            thisElement.focus()
         }
     });
 
