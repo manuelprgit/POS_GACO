@@ -137,29 +137,31 @@
             modalUser.classList.add('show');
 
             btnAccept.addEventListener('click', e => {
-                modalUser.classList.remove('show');
-
+                
                 let userId = userSuperVisor.value;
                 let pass = userPassword.value;
-
+                
                 let superVisorInfo = {
                     userId,
                     pass
                 }
-
+                
                 fetch(`${baseURL}/api/user/validateSuperVisor`,{
                     method: 'POST',
                     body: JSON.stringify(superVisorInfo),
                     headers: { "Content-Type": "application/json" }
                 })
-                    .then(res=>{
-                        if(res.status >= 400){
-                            console.log('Error al verificar el usuario')
-                            console.log(res);
-                        }
-                    })
+                .then(res=>{
+                    console.log(res)
+                    if(res.status >= 400){
+                        console.log(res)
+                        wrongPassword.style.opacity = 1;
+                        return;
+                    }
+                        modalUser.classList.remove('show'); 
+                        resolve(true);
+                    }) 
 
-                resolve(true)
             })
 
             btnCancel.addEventListener('click', e => {
@@ -261,10 +263,7 @@
                 btndltStatus = 'DELETE';
             }
         }
-
-
-        // deleteArticleToInvoice(articleCounter);
-        // console.log(itemsToInvoice)
+ 
     });
 
     btnInsert.addEventListener('click', e => {

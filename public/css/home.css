@@ -185,6 +185,7 @@ table {
 }
 .modal-user-content .modal-user .input-content {
   display: flex;
+  position: relative;
   height: 100%;
   justify-content: center;
   align-items: center;
@@ -195,6 +196,15 @@ table {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+.modal-user-content .modal-user .input-content span.wrong-password {
+  position: absolute;
+  font-size: 14px;
+  bottom: 135px;
+  left: 83px;
+  color: red;
+  font-weight: 500;
+  opacity: 0;
 }
 .modal-user-content .modal-user .input-content .button-content {
   display: flex;
