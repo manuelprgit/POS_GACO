@@ -246,7 +246,6 @@ $box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
                     font-weight: 600;
                     font-size: 16px;
                     cursor: pointer;
-                    outline: none;
                 }
                 .btn-success{
                     background-color: $primary-color;
@@ -260,6 +259,12 @@ $box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
                 }
                 .btn-danger:hover{
                     background-color: #cd4518;
+                }
+                .btn-success:active{
+                    background-color: #d49408;
+                }
+                .btn-danger:active{
+                    background-color: #c53a0c;
                 }
             }
         }

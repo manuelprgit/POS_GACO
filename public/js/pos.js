@@ -45,12 +45,21 @@
 
     }
     fillSelectSuperVisorSelect(getSupervisor);
-
-    let articles;
-    let getArticleBarcode = async (barCode) => {
+ 
+    let getArticleByBarcode = async (barCode,quantity) => {
         try {
 
-            return await fetch(`${baseURL}/api/product/${barCode}`).then(res => {
+            return await fetch(`${baseURL}/api/product`,{
+                method: 'POST',
+                body: {
+                    barCode,
+                    quantity
+                },
+                headers:{
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => {
                 if (res.status >= 400) throw Error(`Error al traer articulo. Error ${res.status}`);
                 return res.json();
             });
@@ -127,10 +136,6 @@
         return false;
     }
 
-    let validateUser = (user) => {
-
-    }
-
     let showAcceptButton = () => {
         return new Promise((resolve, reject) => {
  
@@ -138,6 +143,10 @@
 
             btnAccept.addEventListener('click', e => {
                 
+                let hasEmptyValue = validateInput(modalUser);
+                
+                if(hasEmptyValue) return
+
                 let userId = userSuperVisor.value;
                 let pass = userPassword.value;
                 
@@ -151,14 +160,16 @@
                     body: JSON.stringify(superVisorInfo),
                     headers: { "Content-Type": "application/json" }
                 })
-                .then(res=>{
-                    console.log(res)
+                .then(res=>{ 
                     if(res.status >= 400){
                         console.log(res)
                         wrongPassword.style.opacity = 1;
+                        userPassword.select();
                         return;
                     }
-                        modalUser.classList.remove('show'); 
+                        modalUser.classList.remove('show');
+                        userPassword.textContent = "";
+                        userSuperVisor.value = 0;
                         resolve(true);
                     }) 
 
@@ -199,8 +210,8 @@
 
         thisElement.disabled = true;
 
-        let article = await getArticleBarcode(thisElement.value)
-
+        let article = await getArticleByBarcode(thisElement.value,quantity);
+        console.log(article);
         if (article) {
             renderRow(article, quantity);
             fillItemsToInvoice(article);
@@ -223,7 +234,6 @@
 
 
         if (btndltStatus == 'DELETE') {
-            console.log(articlesSelected)
             if (articlesSelected.length) {
                 articlesSelected.forEach(article => {
                     // let attri = article.getAttribute('data-counter');
@@ -249,6 +259,11 @@
             }
 
         } else {
+            userSuperVisor.value = 0;
+            userPassword.value = '';
+            wrongPassword.style.opacity = 0;
+            userSuperVisor.focus();
+
             let buttonResult = await showAcceptButton();
 
             if (buttonResult) {
@@ -305,11 +320,18 @@
 
     });
 
-    btnAccept.addEventListener('click', e => {
-        showAcceptButton('hide')
+    userPassword.addEventListener('keydown',e=> {
+        wrongPassword.style.opacity = 0;
+        if(e.key == 'Enter'){
+           btnAccept.click();
+        }
     })
-    btnCancel.addEventListener('click', e => {
-        showAcceptButton('hide')
+
+    document.addEventListener('change',e => {
+        if(element.classList.contains('wrong-input')) removeWrongClass(e.target);
     })
+
+    btnAccept.addEventListener('click', e => showAcceptButton('hide'))
+    btnCancel.addEventListener('click', e => showAcceptButton('hide'))
 
 })()

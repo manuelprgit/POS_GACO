@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { 
     getProducts,
     postInvoice,
-    getProductById
+    getProductById,
+    getProductByBarCode
 } from '../controllers/products.controller'
 
 const baseUrl = '/api/product/';
@@ -10,6 +11,8 @@ const baseUrl = '/api/product/';
 const router = Router();
 
 router.get(`${baseUrl}:barcode`, getProductById);
+
+router.post(`${baseUrl}`,getProductByBarCode);
 
 
 // router.get(baseUrl, getProducts);

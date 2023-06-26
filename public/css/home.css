@@ -221,7 +221,6 @@ table {
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  outline: none;
 }
 .modal-user-content .modal-user .input-content .button-content .btn-success {
   background-color: #F9B318;
@@ -234,6 +233,12 @@ table {
 }
 .modal-user-content .modal-user .input-content .button-content .btn-danger:hover {
   background-color: #cd4518;
+}
+.modal-user-content .modal-user .input-content .button-content .btn-success:active {
+  background-color: #d49408;
+}
+.modal-user-content .modal-user .input-content .button-content .btn-danger:active {
+  background-color: #c53a0c;
 }
 .modal-user-content .input-form {
   width: 269px;

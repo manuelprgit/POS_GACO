@@ -18,6 +18,10 @@ const getSuperVisor = async (req, res) => {
 const validateUser = async (req, res) => {
   let pool = await getConnection();
   let userInfo = req.body;
+  console.log(userInfo)
+  if(userInfo.userId == 0){
+    return res.status(400).json({status: 400, msg: 'debe seleccionar el usuario'})
+  }
   let validateResult = await pool.request().query(`
         select * from supervis where numero = ${userInfo.userId}
     `);
