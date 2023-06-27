@@ -5,10 +5,10 @@ declare @cantidad int
 declare @almacen int = 1;
 -----------------PASO 1----------------
 set @article = (select CODIGO from mercan where referencia = @article)
-SELECT * FROM MERCAN where REFERENCIA = @article;
+SELECT CAT_ITBIS,* FROM MERCAN where REFERENCIA = @article;	
 
 -----------------PASO 2----------------
-set @cat_itbis = (select cat_itbis from mercan where referencia = '10')
+set @cat_itbis = (select cat_itbis from mercan where referencia = '10');
 select * from CAT_ITBIS where numero = @cat_itbis;
 
 -----------------PASO 3----------------

@@ -12,7 +12,7 @@ const router = Router();
 
 router.get(`${baseUrl}:barcode`, getProductById);
 
-router.post(`${baseUrl}`,getProductByBarCode);
+router.post(`${baseUrl}`, getProductByBarCode);
 
 
 // router.get(baseUrl, getProducts);

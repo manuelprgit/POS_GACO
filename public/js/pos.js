@@ -48,13 +48,13 @@
  
     let getArticleByBarcode = async (barCode,quantity) => {
         try {
-
-            return await fetch(`${baseURL}/api/product`,{
+            console.log( barCode,quantity)
+            return await fetch(`${baseURL}/api/product/`,{
                 method: 'POST',
-                body: {
+                body: JSON.stringify({
                     barCode,
                     quantity
-                },
+                }),
                 headers:{
                     'Content-Type': 'application/json'
                 }

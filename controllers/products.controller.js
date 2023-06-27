@@ -32,9 +32,8 @@ const getProductById = async (req, res) => {
 }
 
 const getProductByBarCode = async (req, res) => {
-
-    let pool = await getConnection();
-    console.log(req.params)
+ 
+    getParamsRequired(req.body);
 
 }
 
@@ -45,36 +44,49 @@ const postInvoice = async (req, res) => {
 
 }
 
-const getParamsRequired = async (req, res) => {
+const getParamsRequired = async (params) => {
+  
+    let article = await getArticleById(params.barCode);
+    article = article.recordset[0]; 
+    let cat_itbis = await getCatItbis(article.CAT_ITBIS);
+    cat_itbis = cat_itbis.recordset[0];
+    let existen = await getExisten(article.CODIGO);
+    existen = existen.recordset[0];
 
-    let pool = await getConnection();
-    const paramsRequired = req.body;
+    let paramsRequired = {
+        params,
+        article,
+        cat_itbis,
+        existen
+    }
 
-    let article = await getArticleById(paramsRequired.referencia);
-    let cat_itbis = await getCatItbis(article.cat_itbis);
-    let existen = await getExisten(article.codigo);
+    console.log({article,cat_itbis,existen}) 
+
+    subtractExisten(paramsRequired);
+
+    insertMovimi(paramsRequired);
 
 }
 
 const getArticleById = async (barCode) => {
     
-    let pool = await getConnection();
-    
+    let pool = await getConnection(); 
     return await pool
                 .request()
                 .query(`
-                        select * from mercan
-                        where referencia = ${barCode}
-                    `);        
+                    select * from mercan
+                    where referencia = '${barCode}'
+                    `);         
 }
 const getCatItbis = async (cat_itbis) => {
-  let pool = await getConnection();
-  return await pool
+ 
+    let pool = await getConnection();
+    return await pool
                 .request()
                 .query(`
-                    select * from cat_itbis
-                    where numero = ${cat_itbis}
-                `);
+                        select * from CAT_ITBIS
+                        where numero = ${cat_itbis}
+                `); 
 }
 const getExisten = async (articleId) => {
   let pool = await getConnection();
@@ -85,8 +97,74 @@ const getExisten = async (articleId) => {
                 where codigo = ${articleId}
                `);
 }
-const updateExisten = async () => {
-  
+
+const subtractExisten = async (param) => {
+  let pool = await getConnection();
+
+  let cantidad = param.existen.CANTIDAD - param.params.quantity;
+
+  pool.request().query(`
+    UPDATE EXISTEN 
+    SET CANTIDAD = ${cantidad}
+    WHERE CODIGO = ${param.article.CODIGO}
+    AND ALMACEN = 1
+  `)
+}
+
+const insertMovimi = async (param) => {
+  let pool = await getConnection();
+  pool
+  .request()
+  .query(`
+        insert into movimi
+        (
+            CODIGO      --codigo del articulo
+            ,TIPO        --FT creo que es factura
+            ,E_S		 --E = Entrada, S = Salida
+            ,FECHA		 --Fecha
+            ,DOCUMENTO   --El documento es la factura
+            ,CANTIDAD1   --La cantidad que ENTRO
+            ,CANTIDAD2   --La cantidad que SALIO
+            ,PRECIO      --Precio
+            ,COSTO       --costo_prom
+            ,ALMACEN     --Almacen
+            ,SUCURSAL    --''
+            ,CUENTA      --Clase
+            ,SUBTOTAL	 --CANTIDAD * PRECIO
+            ,CLIENTE	 --CLIENTE
+            ,CANTIDAD	 --Cantidad
+            ,FECHA_DOC   --null
+            ,EXIST_ANT   --cantidad que traemos al darle select a existen
+            ,EXIST_POST	 --cantidad que se resta O se suma a la existencia anterior
+            ,HORA		 --hora en la que se hizo el movimiento
+            ,REFERENCIA	 --codigo de babrra
+            ,DETALLE	 --E: Borrado Caja Papeleria , S: Caja Papeleria
+        ) 
+            VALUES
+        (
+            ${param.article.CODIGO},
+            'FT',
+            'E',
+            80403, --TODO: ARREGLAR ESTA FECHA,
+            '6666',
+            ${param.params.quantity},
+            0,
+            ${param.article.PRECIO},
+            ${param.article.COSTO_PROM},
+            1,
+            '',
+            ${param.article.CLASE},
+            ${param.params.quantity * param.article.PRECIO},
+            0,
+            ${param.params.quantity},
+            null,
+            ${param.existen.CANTIDAD},
+            ${param.existen.CANTIDAD - param.params.quantity},
+            '${new Date().toISOString().substring(11,19)}',
+            '${param.article.REFERENCIA}',
+            'Insertado caja PRUEBA'
+        )
+  `)
 }
 
 
