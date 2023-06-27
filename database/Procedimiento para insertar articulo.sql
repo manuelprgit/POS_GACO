@@ -9,7 +9,8 @@ SELECT CAT_ITBIS,* FROM MERCAN where REFERENCIA = @article;
 
 -----------------PASO 2----------------
 set @cat_itbis = (select cat_itbis from mercan where referencia = '10');
-select * from CAT_ITBIS where numero = @cat_itbis;
+select * from CAT_ITBIS where numero = 1;
+
 
 -----------------PASO 3----------------
 select * from existen where CODIGO = @article and ALMACEN = @almacen 
@@ -18,6 +19,7 @@ select * from existen where CODIGO = @article and ALMACEN = @almacen
 UPDATE DBO.EXISTEN SET CANTIDAD = @cantidad WHERE CODIGO = @article AND ALMACEN = @almacen
 
 -----------------PASO 5----------------
+select * from movimi
 insert into movimi
 (
  CODIGO      --codigo del articulo
@@ -71,6 +73,11 @@ UPDATE DBO.MERCAN
 	SET FECHA_U_V = 123456--Fecha ultima venta
 	   ,DOC_U_V = 123123--Documento ultima venta
 WHERE CODIGO = @article
+
+select 
+dbo.fn_CtoSql (Fecha),
+dbo.fn_SqlToC('2023-06-27'),
+* from movimi
 
 -----------------PASO 7---------------- 
 INSERT INTO AUDITOR 

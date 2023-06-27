@@ -118,7 +118,7 @@ const insertMovimi = async (param) => {
   .query(`
         insert into movimi
         (
-            CODIGO      --codigo del articulo
+             CODIGO      --codigo del articulo
             ,TIPO        --FT creo que es factura
             ,E_S		 --E = Entrada, S = Salida
             ,FECHA		 --Fecha
@@ -142,29 +142,40 @@ const insertMovimi = async (param) => {
         ) 
             VALUES
         (
-            ${param.article.CODIGO},
-            'FT',
-            'E',
-            80403, --TODO: ARREGLAR ESTA FECHA,
-            '6666',
-            ${param.params.quantity},
-            0,
-            ${param.article.PRECIO},
-            ${param.article.COSTO_PROM},
-            1,
-            '',
-            ${param.article.CLASE},
-            ${param.params.quantity * param.article.PRECIO},
-            0,
-            ${param.params.quantity},
-            null,
-            ${param.existen.CANTIDAD},
-            ${param.existen.CANTIDAD - param.params.quantity},
-            '${new Date().toISOString().substring(11,19)}',
-            '${param.article.REFERENCIA}',
-            'Insertado caja PRUEBA'
+             ${param.article.CODIGO}
+            ,'FT'
+            ,'S'
+            ,dbo.fn_SqlToC('${new Date().toISOString().substring(0,10)}')
+            ,'6666'
+            ,${param.params.quantity}
+            ,0
+            ,${param.article.PRECIO}
+            ,${param.article.COSTO_PROM}
+            ,1
+            ,''
+            ,${param.article.CLASE}
+            ,${param.params.quantity * param.article.PRECIO}
+            ,0
+            ,${param.params.quantity}
+            ,null
+            ,${param.existen.CANTIDAD}
+            ,${param.existen.CANTIDAD - param.params.quantity}
+            ,'${new Date().toISOString().substring(11,19)}'
+            ,'${param.article.REFERENCIA}'
+            ,'Insertado caja PRUEBA'
         )
   `)
+}
+
+const updateLastSold = (articleId) => {
+    let pool = getConnection();
+    pool.request.query(
+        `UPDATE DBO.MERCAN 
+        SET FECHA_U_V = 123456--Fecha ultima venta
+           ,DOC_U_V   = 123123--Documento ultima venta
+        WHERE CODIGO = @article`
+    )
+  
 }
 
 
