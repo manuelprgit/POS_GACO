@@ -69,15 +69,11 @@ insert into movimi
 )
 
 -----------------PASO 6----------------
+
 UPDATE DBO.MERCAN 
 	SET FECHA_U_V = 123456--Fecha ultima venta
 	   ,DOC_U_V = 123123--Documento ultima venta
 WHERE CODIGO = @article
-
-select 
-dbo.fn_CtoSql (Fecha),
-dbo.fn_SqlToC('2023-06-27'),
-* from movimi
 
 -----------------PASO 7---------------- 
 INSERT INTO AUDITOR 

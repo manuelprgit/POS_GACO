@@ -11,3 +11,4 @@ var validateInput = (container) => {
     let inputs = container.querySelectorAll('.required');
     inputs.forEach(input => setWrongClass(input));
 }
+ 

@@ -4,7 +4,7 @@ const dbSettings = {
     user: 'sa',
     password: '123',
     server: 'localhost',
-    database: 'PAPELERIA_GACO',
+    database: 'PVENTA',
     options:{
         encrypt: true,
         trustServerCertificate: true

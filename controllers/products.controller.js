@@ -1,6 +1,21 @@
 import { query } from 'mssql';
 import { getConnection } from '../database/conection.js'
 
+const getFormattedDate = (date) => {
+
+  date = new Date(date); 
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  
+}
+
 const getProducts = async (req, res) => {
 
     let pool = await getConnection();
@@ -44,8 +59,20 @@ const postInvoice = async (req, res) => {
 
 }
 
+const createInvoice = async () => {
+  let pool = await getConnection();
+  return await pool
+                        .request()
+                        .query(
+                            `select max(NUMERO) NUMERO from facturas`
+                        );
+
+}
+
 const getParamsRequired = async (params) => {
   
+    let lastInvoice = await createInvoice();
+    lastInvoice = lastInvoice.recordset[0]
     let article = await getArticleById(params.barCode);
     article = article.recordset[0]; 
     let cat_itbis = await getCatItbis(article.CAT_ITBIS);
@@ -54,6 +81,7 @@ const getParamsRequired = async (params) => {
     existen = existen.recordset[0];
 
     let paramsRequired = {
+        lastInvoice,
         params,
         article,
         cat_itbis,
@@ -112,11 +140,12 @@ const subtractExisten = async (param) => {
 }
 
 const insertMovimi = async (param) => {
+    
   let pool = await getConnection();
   pool
   .request()
   .query(`
-        insert into movimi
+        insert into PAPELERIA_GACO.dbo.MOVIMI
         (
              CODIGO      --codigo del articulo
             ,TIPO        --FT creo que es factura
@@ -145,8 +174,8 @@ const insertMovimi = async (param) => {
              ${param.article.CODIGO}
             ,'FT'
             ,'S'
-            ,dbo.fn_SqlToC('${new Date().toISOString().substring(0,10)}')
-            ,'6666'
+            ,PAPELERIA_GACO.dbo.fn_SqlToC('${new Date().toISOString().substring(0,10)}')
+            ,${param.lastInvoice.NUMERO}
             ,${param.params.quantity}
             ,0
             ,${param.article.PRECIO}
@@ -160,7 +189,7 @@ const insertMovimi = async (param) => {
             ,null
             ,${param.existen.CANTIDAD}
             ,${param.existen.CANTIDAD - param.params.quantity}
-            ,'${new Date().toISOString().substring(11,19)}'
+            ,'${getFormattedDate(new Date()).substring(11,19)}'
             ,'${param.article.REFERENCIA}'
             ,'Insertado caja PRUEBA'
         )
