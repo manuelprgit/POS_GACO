@@ -60,19 +60,23 @@ const postInvoice = async (req, res) => {
 }
 
 const createInvoice = async () => {
-  let pool = await getConnection();
-  return await pool
-                        .request()
-                        .query(
-                            `select max(NUMERO) NUMERO from facturas`
-                        );
 
+    let lastNumber;
+
+    let pool = await getConnection();
+    lastNumber = await pool
+                            .request()
+                            .query(`
+                                select max(NUMERO) NUMERO from facturas;
+                            `);
+    let nextNumber = Number(lastNumber.recordset[0].NUMERO) + 1;
+    pool.request().query(`insert into facturas (numero) values (${nextNumber})`);
+    return nextNumber;
 }
 
 const getParamsRequired = async (params) => {
   
-    let lastInvoice = await createInvoice();
-    lastInvoice = lastInvoice.recordset[0]
+    let nextNumber = await createInvoice();
     let article = await getArticleById(params.barCode);
     article = article.recordset[0]; 
     let cat_itbis = await getCatItbis(article.CAT_ITBIS);
@@ -81,7 +85,7 @@ const getParamsRequired = async (params) => {
     existen = existen.recordset[0];
 
     let paramsRequired = {
-        lastInvoice,
+        nextNumber,
         params,
         article,
         cat_itbis,
@@ -93,6 +97,8 @@ const getParamsRequired = async (params) => {
     subtractExisten(paramsRequired);
 
     insertMovimi(paramsRequired);
+
+    updateLastSold(getFormattedDate(new Date()),nextNumber,article.CODIGO)
 
 }
 
@@ -175,7 +181,7 @@ const insertMovimi = async (param) => {
             ,'FT'
             ,'S'
             ,PAPELERIA_GACO.dbo.fn_SqlToC('${new Date().toISOString().substring(0,10)}')
-            ,${param.lastInvoice.NUMERO}
+            ,${param.nextNumber}
             ,${param.params.quantity}
             ,0
             ,${param.article.PRECIO}
@@ -196,17 +202,22 @@ const insertMovimi = async (param) => {
   `)
 }
 
-const updateLastSold = (articleId) => {
-    let pool = getConnection();
-    pool.request.query(
-        `UPDATE DBO.MERCAN 
-        SET FECHA_U_V = 123456--Fecha ultima venta
-           ,DOC_U_V   = 123123--Documento ultima venta
-        WHERE CODIGO = @article`
-    )
+const updateLastSold = async (date, number,articleId) => {
+    console.log({date,number,articleId})
+    console.log(new Date().toISOString().substring(0,10))
+    let pool = await getConnection();
+    await pool.request().query(`
+            UPDATE DBO.MERCAN 
+            SET FECHA_U_V = PAPELERIA_GACO.dbo.fn_SqlToC('${new Date().toISOString().substring(0,10)}')
+            ,DOC_U_V   = ${number}
+            WHERE CODIGO = ${articleId}`
+        )
   
 }
 
+const insertAuditor = async () => {
+  
+}
 
 export {
     getProducts,
