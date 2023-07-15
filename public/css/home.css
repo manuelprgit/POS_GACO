@@ -318,6 +318,67 @@ main .content section {
   border-radius: 12px;
   background-color: #F26332;
 }
+main .content section .context-menu {
+  position: absolute;
+  top: 195px;
+  right: 354px;
+  background-color: white;
+  width: 316px;
+  height: 0px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 8px;
+  transition: 0.2s;
+  overflow: hidden;
+  z-index: 600;
+}
+main .content section .context-menu .profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 12px;
+  height: auto;
+  border-radius: 8px;
+  width: 268px;
+  padding: 0 10px;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+}
+main .content section .context-menu .profile-info figure {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+}
+main .content section .context-menu .option-content .option {
+  width: 252px;
+  height: 50px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  align-items: center;
+  margin: 14px 0;
+  padding: 0 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+main .content section .context-menu .option-content .option .icon-content {
+  width: 36px;
+  height: 36px;
+  background-color: #4A4A4A;
+  border-radius: 25px;
+  display: grid;
+  place-content: center;
+}
+main .content section .context-menu .option-content .option:hover {
+  background-color: #f2f2f2;
+}
+main .content section .context-menu .option-content .option:active {
+  background-color: #ececec;
+}
+main .content section .context-menu.show {
+  height: 150px;
+  padding: 16px;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+}
 main .content section .head {
   display: flex;
   justify-content: end;

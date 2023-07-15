@@ -3,9 +3,11 @@
     let tableArticleBody = document.getElementById('tableArticleBody');
     let bar_code_input = document.getElementById('bar_code_input');
     let name_client = document.getElementById('name_client');
+    let cedu_client = document.getElementById('cedu_client');
     let totalArticles = document.getElementById('totalArticles');
     let totalPrice = document.getElementById('totalPrice');
     let btnInsert = document.getElementById('btnInsert');
+    let profileContent = document.getElementById('profileContent');
     let btnDelete = document.getElementById('btnDelete');
     let btnSend = document.getElementById('btnSend');
     let tableArticle = document.getElementById('tableArticle');
@@ -25,14 +27,13 @@
     let mode = 'NORMAL';
     let btndltStatus = 'NORMAL';
 
-    let baseURL = 'http://localhost:4551'
 
     let getSupervisor = await fetch(`${baseURL}/api/user/superVisor`)
         .then(res => {
             if (res.status >= 400) throw Error('Error al traer los super visores');
             return res.json();
-        })
- 
+        }) 
+
     fillSelectSuperVisorSelect(getSupervisor,userSuperVisor);
  
     let getArticleByBarcode = async (barCode,quantity) => {
@@ -144,11 +145,11 @@
                     pass
                 }
                 
-                fetch(`${baseURL}/api/user/validateSuperVisor`,{
-                    method: 'POST',
-                    body: JSON.stringify(superVisorInfo),
-                    headers: { "Content-Type": "application/json" }
-                })
+                // fetch(`${baseURL}/api/user/validateSuperVisor`,{
+                //     method: 'POST',
+                //     body: JSON.stringify(superVisorInfo),
+                //     headers: { "Content-Type": "application/json" }
+                // })
                 .then(res=>{ 
                     if(res.status >= 400){
                         console.log(res)
@@ -171,6 +172,10 @@
 
         })
     }
+
+    profileContent.addEventListener('click',e=>{
+        
+    });
 
     bar_code_input.addEventListener('change', async e => {
 
@@ -238,6 +243,7 @@
 
             bar_code_input.classList.remove('disable');
             name_client.classList.remove('disable');
+            cedu_client.classList.remove('disable');
             btnSend.classList.remove('disable');
             btndltStatus = 'NORMAL';
             let list = tableArticleBody.querySelectorAll('.tr');
@@ -276,6 +282,7 @@
             btnInsert.classList.add('disable');
             bar_code_input.disabled = false;
             name_client.disabled = false;
+            cedu_client.disabled = false;
             bar_code_input.focus();
 
             mode = 'INSERT';

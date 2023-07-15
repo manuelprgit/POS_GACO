@@ -1,3 +1,8 @@
+window.baseURL = 'http://localhost:4551'
+
+let contextMenu = document.getElementById('contextMenu');
+let profile = document.getElementById('profile');
+
 var formatter = Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -22,3 +27,12 @@ var fillSelectSuperVisorSelect = (superVisors,selectTag) => {
     }
     selectTag.append(fragment);
 }
+
+profile.addEventListener('click',e=>{
+    if(contextMenu.classList.contains('show')){
+        contextMenu.classList.remove('show');
+    }else{
+        contextMenu.classList.add('show');
+    }
+})
+
