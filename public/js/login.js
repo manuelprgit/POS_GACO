@@ -45,10 +45,12 @@
             userId: username.value,
             passWord: password.value
         };
-        let validateResult = await validateUser(userInfo);
-        console.log(validateResult)
-        if(validateResult){
-            // window.location.href = './'
+        // let validateResult = await validateUser(userInfo);
+        //TODO: Se esta validando si userInfo es verdadero y SIEMPRE sera verdadero
+        if(userInfo){
+            //TODO: la informacion que se esta llenando es la de userinfo
+            localStorage.setItem('userInfo',JSON.stringify(userInfo));
+            window.location.href = './';
         }
 
     })

@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+<script>
+    let userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (!userInfo) {
+        window.location.href = './login.html'
+    }
+</script>
 
 <head>
     <meta charset="UTF-8">
@@ -11,6 +17,7 @@
         href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="./css/home.css">
+    <link rel="icon" type="image/png" href="./src/favico.png">
 </head>
 
 <body>
@@ -34,7 +41,7 @@
                         <div class="icon-content">
                             <span class="password"></span>
                         </div>
-                        <input type="password" id='userPassword'  class="input-form required">
+                        <input type="password" id='userPassword' class="input-form required">
                     </div>
                 </label>
                 <span class="wrong-password" id="wrongPassword">Usuario y/o contraseña incorrecta</span>
@@ -62,8 +69,8 @@
             </aside>
 
             <section>
-                <div class="head">
-                    <div class="info-content">
+                <div class="head" id="profile">
+                    <div class="info-content" id="profileContent">
                         <div class="personal-info">
                             <h2>Oscar Monterreal</h2>
                             <p>Cajero oficial</p>
@@ -73,6 +80,25 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="context-menu" id="contextMenu">
+                    <div class="profile-info">
+                        <figure>
+                            <img src="../SRC/IMG/manuel.png" alt="">
+                        </figure>
+                        <p>Manuel Perez</p>
+                    </div>
+                    <div class="option-content">
+                        <div class="option">
+                            <div class="icon-content">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            </div>
+                            <p>Cerrar sesión</p>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="section-body">
                     <div class="articles-section">
                         <div class="input-form">
@@ -164,7 +190,12 @@
                         <div class="input-form">
                             <label for="name_client">Nombre</label>
                             <input type="text" id="name_client" autocomplete="off" disabled>
-                            <span>Nombre del cliente</span>
+                            <span>Nombre del cliente (OPCIONAL)</span>
+                        </div>
+                        <div class="input-form">
+                            <label for="cedu_client">Cédula</label>
+                            <input type="text" id="cedu_client" autocomplete="off" disabled>
+                            <span>Cédula del cliente (OPCIONAL)</span>
                         </div>
                         <div class="actions-button">
 
@@ -188,7 +219,7 @@
                 </div>
             </section>
         </div>
-    </main> 
+    </main>
     <script src="/js/main.js"></script>
     <script src="/js/pos.js"></script>
 </body>
