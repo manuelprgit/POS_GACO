@@ -9,7 +9,7 @@
     let validateUser = async (userProfile) => {
       
         let userValiate;
-//
+        
         await fetch(`${baseURL}/api/user/validateSuperVisor`,{
             method: 'POST',
             body: JSON.stringify(userProfile),
