@@ -1,0 +1,246 @@
+$primary-color: #acd4f5;
+$primary-color-stro: #74bffc;
+
+$box-shadow: 3px 3px 8px 1px rgba(0,0,0,0.25);
+
+//#region RESET CSS
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+input,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    font-size: 62.5%;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline;
+    font-family: 'Nunito', sans-serif;
+    box-sizing: border-box;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+img{
+    width: 100%;
+    height: 100%;
+}
+//#endregion RESET CSS
+ 
+
+@mixin displayFles($justify: null, $align: null,  $direction: null){
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+}
+
+.container{
+    width: 100vw;
+    height: 100vh;
+    @include displayFles(center,center);
+    .track-content{
+        width: 62%;
+        height: 80%;
+        min-width: 1200px;
+        min-height: 750px;
+        box-shadow: 4px 4px 11px 4px rgba(0,0,0,0.25);
+        border-radius: 12px;
+        @include displayFles();
+        .form-content{
+            width: 50%;
+            @include displayFles(center,null, column);
+            gap: 60px;
+            h1{
+                font-size: 3.4rem;
+                text-align: center
+            }
+            form{
+                @include displayFles(null,center,column);
+                gap: 12px;
+                label{
+                    @include displayFles(null,null,column);
+                    width: 62%;
+                    margin-bottom: 30px;
+                    span{
+                        margin-bottom: 17px;
+                        font-size: 2rem;
+                    }
+                    input,
+                    select{
+                        height: 52px;
+                        border: none;
+                        box-shadow: $box-shadow;
+                        border-radius: 6px;
+                        padding: 0 12px;
+                        font-size: 1.5rem;
+                    }
+                    input:focus,
+                    select:focus{
+                        outline: none;
+                    }
+                }
+                .button-content{
+                    input{
+                        background: $primary-color;
+                        border: none;
+                        height: 52px;
+                        width: 223px;
+                        border-radius: 24px;
+                        box-shadow: $box-shadow;
+                        font-weight: 600;
+                        font-size: 1.8rem;
+                        cursor: pointer;
+                    }
+                    input:hover{
+                        background-color: $primary-color-stro;
+                    }
+                }
+            }
+        }
+        .imges-content{
+            width: 50%;
+            position: relative;
+            .teaching,
+            .notes{
+                width: 428px;
+                height: 466px;
+                position: absolute;
+            }
+            .teaching{
+                right: 16px;
+            }
+            .notes{
+                bottom: 0;
+            }
+        }
+    }
+}
+
+@media (min-width: 425px){
+    
+}
+
+@media (min-width: 768px){
+    
+}
+
+@media (min-width: 1024px){
+    
+}

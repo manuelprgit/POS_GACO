@@ -55,7 +55,6 @@ const getProductByBarCode = async (req, res) => {
 const postInvoice = async (req, res) => {
 
     let result = req.body;
-    console.log(result);
 
 }
 
@@ -90,16 +89,31 @@ const getParamsRequired = async (params) => {
         article,
         cat_itbis,
         existen
-    }
-
-    console.log({article,cat_itbis,existen}) 
+    } 
 
     subtractExisten(paramsRequired);
 
     insertMovimi(paramsRequired);
 
-    updateLastSold(getFormattedDate(new Date()),nextNumber,article.CODIGO)
+    updateLastSold(getFormattedDate(new Date()),nextNumber,article.CODIGO);
 
+    insertAuditor(paramsRequired);
+
+    upadteOrdenFfactura(paramsRequired);
+
+    let subGrupo = await getSubGrupo(paramsRequired);
+    
+    let clase = await getClase(paramsRequired);
+
+    let suplidor = await getSuplior(paramsRequired);
+
+    paramsRequired = {...paramsRequired
+                     ,...subGrupo
+                     ,...clase
+                     ,...suplidor
+                    }
+
+    console.log(paramsRequired)
 }
 
 const getArticleById = async (barCode) => {
@@ -112,6 +126,7 @@ const getArticleById = async (barCode) => {
                     where referencia = '${barCode}'
                     `);         
 }
+
 const getCatItbis = async (cat_itbis) => {
  
     let pool = await getConnection();
@@ -122,6 +137,7 @@ const getCatItbis = async (cat_itbis) => {
                         where numero = ${cat_itbis}
                 `); 
 }
+
 const getExisten = async (articleId) => {
   let pool = await getConnection();
   return await pool
@@ -203,8 +219,7 @@ const insertMovimi = async (param) => {
 }
 
 const updateLastSold = async (date, number,articleId) => {
-    console.log({date,number,articleId})
-    console.log(new Date().toISOString().substring(0,10))
+    
     let pool = await getConnection();
     await pool.request().query(`
             UPDATE DBO.MERCAN 
@@ -215,7 +230,195 @@ const updateLastSold = async (date, number,articleId) => {
   
 }
 
-const insertAuditor = async () => {
+const insertAuditor = async (param) => {
+  let pool = await getConnection();
+
+  try {
+      
+    await pool.request().query(`
+    INSERT INTO AUDITOR 
+    (
+         ORDEN			--0
+        ,HORA			--HORA
+        ,FECHA			--FECHA
+        ,ACCION			--0 = Creacion de factura, 1 = Insercion de articulo, 3 = remover articulo
+        ,COMENTARIO     --Codigo 9(Codigo del articulo) Cant. 1 No. 3903780 (Numero del documento)
+        ,COMENTARIO2	--nada
+        ,TIPO_DOC		--FT
+        ,USUARIO		--Cajera
+        ,NIVEL			--1
+        ,MODULO			--Factura
+    ) VALUES 
+    (
+         0
+        ,dbo.fnSqlToClarion('${getFormattedDate(new Date()).substring(11,18)}')
+        ,dbo.fnSqlToClarion('${new Date().toISOString().substring(0,10)}')
+        ,1
+        ,'Codigo ${param.article.CODIGO} Cantidad ${param.params.quantity} No. ${param.nextNumber}'
+        ,''
+        ,'PR' 
+        ,'Cajero temporal' --TODO: Traer el cajero del login
+        ,1      --TODO: traer nivel del cajero desde el login
+        ,'Proforma'
+    )
+    `)
+        
+  } catch (error) {
+    return({
+        msg: 'Error al insertar en tabla AUDITOR',
+        error: error
+    })
+  }
+}
+
+const upadteOrdenFfactura = async(param) => {
+    let pool = await getConnection();
+    pool.request().query(`
+        UPDATE dbo.facturas 
+        SET ORDEN =  1 --TODO: ver de donde sacamos orden
+        WHERE NUMERO = ${param.nextNumber}
+    `)  
+}
+
+const getSubGrupo = async(param) => {
+    let pool = await getConnection();
+
+    try {
+        let {recordset} = await pool.request().query(`
+            select 
+                 CODIGO 
+                ,GRUPO 
+                ,DESCRIPCION 
+            from Subgrupo 
+            where CODIGO = ${param.article.SUB_GRUPO} --SUB_GRUPO del articulo
+            and GRUPO = 1 --TODO: no se donde encontrar el grupo
+        `);
+
+        return (recordset.length > 0) ? recordset : 0;
+
+    } catch (error) {
+        return({
+            msg: 'Error al traer el subgrupo',
+            error: error
+        })
+    } 
+    
+}
+
+const getClase = async(param) => {
+    let pool = await getConnection();
+
+    try {
+        let {recordset} = await pool.request().query(`
+            select 
+                 CODIGO
+                ,DESCRIPCION
+                ,CUENTA
+                ,DC_ING
+                ,CTA_COSTO
+                ,DC_COS
+                ,CTA_DEVOLU
+                ,DC_DEV 
+            from clases
+            where codigo = ${param.article.CLASE}
+        `); 
+
+        return (recordset.length > 0) ? recordset : 0;
+
+    } catch (error) {
+        return({
+            msg: 'Error al traer la clase',
+            error: error
+        })
+    } 
+    
+}
+
+const getSuplior = async(param) => {
+    let pool = await getConnection();
+
+    try {
+        let {recordset} = await pool.request().query(`
+            select * from papeleria_gaco.dbo.CXP_01
+            where codigo = ${param.article.SUPLIDOR}
+        `); 
+        return (recordset.length > 0) ? recordset : 0
+        
+    } catch (error) {
+        return({
+            msg: 'Error al traer el suplidor',
+            error: error
+        })
+    }
+
+}
+
+const insertIntD_Fatcs = async(param) => {
+    let pool = await getConnection();
+
+    pool.request().query(`
+    INSERT INTO D_FACTS 
+    (
+         NUMERO			--numero de la factura
+        ,MERCANCIA		--codigo pequeño del articulo
+        ,MOVIMIENTO		--0
+        ,CANTIDAD		--Cantidad
+        ,PRECIO			--Precio
+        ,DESCUENTO		--Descuento
+        ,DESCUENTO2		--Descuento 2
+        ,COSTO			--costo_prom
+        ,SALDO_CANT		--0
+        ,SALDO_VALOR	--0
+        ,ALMACEN		--1
+        ,ITBIS			--subtotal * 0.152542
+        ,BAND_ITBIS		--S: si lleva itbis, N: si no lleva itbis
+        ,SUBTOTAL		--cantidad * precio
+        ,TIPO			--0
+        ,OFERTA			--0
+        ,COMISION		--categoria de itbis del articulo
+        ,VENDEDOR		--0
+        ,FECHA			--fechaa
+        ,LADO			--sucursal que podria ser el 4
+        ,SERVICIO       --""
+        ,REFERENCIA		--codigo de barra
+        ,ORDEN			--TODO: PREGUNTAR QUE ES EL ORDEN
+        ,SECUENCIA		--TODO: PREGUNTAR QUE ES LA SECUENCIA
+        ,DESCRIPCION	--Descripcion del articulo
+        ,EXENTAS		--BAND_ITBIS != 'S' ? EXENTAS = SUBTOTAL : EXENTAS = 0
+        ,GRAVADAS		--BAND_ITBIS == 'S' ? GRAVADAS = SUBTOTAL : GRAVADAS = 0
+        ,FAMILIA		--CLASES DE MERCAN
+        ,N_FAMILIA		--EN LA TABLA CLASES PODEMOS ENCONTRAR LA DESCRIPCION.
+        ,DPTO			--DPTO DE MERCAN
+        ,N_DPTO			--EN LA TABLA INV_DEP PODEMOS ENCONTRAR LA DESCRIPCION.
+        ,SUBDPTO		--TODO: DE DONDE SACO SUB DEPTARTAMENTO
+        ,N_SUBDPTO		--TODO: DE DONDE SACO NOMBRE SUB DEPTARTAMENTO
+        ,SUPLIDOR		--EN MERCAN HAY UNA COLUMNA CON EL CODIGO DEL SUPLIDOR
+        ,DPTO_SUP		--TODO: ""
+        ,N_DEP_SUP		--TODO: ""
+        ,FABRICA		--TODO: ""
+        ,N_FABRICA		--TODO: ""
+        ,MARCA			--TODO: "" 
+        ,N_MARCA		--TODO: ""
+        ,UBICA			--TODO: ""
+        ,N_UBICA		--TODO: ""
+        ,PRECIO2		--TABLA DE MERCAN
+        ,PRECIO3		--TABLA DE MERCAN
+        ,PRECIO4		--TABLA DE MERCAN
+        ,COSTO_PROM		--TABLA DE MERCAN
+        ,ULT_COSTO		--TABLA DE MERCAN
+        ,POR_ITBIS		--TABLA DE CAT_ITBIS
+        ,REBAJADO		--TODO: 1
+        ,FECHA_DIA		--Fecha convertida en Date
+        ,HORA_DIA		--Hora convertida en Date
+        ,MI_PC			--Nombre de la caja
+        ,INSTANCIA		--Nombre de la caja
+        ,USUARIO		--Ususario del login
+        ,TIENDA			--Sucursal
+    ) VALUES 
+    (
+
+    )
+    `)
   
 }
 

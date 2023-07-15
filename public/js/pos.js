@@ -32,19 +32,8 @@
             if (res.status >= 400) throw Error('Error al traer los super visores');
             return res.json();
         })
-
-    let fillSelectSuperVisorSelect = (superVisors) => {
-        let fragment = document.createDocumentFragment();
-        for (let superVisor of superVisors) {
-            let option = document.createElement('option');
-            option.setAttribute('value', superVisor.NUMERO);
-            option.innerText = superVisor.USUARIOS;
-            fragment.append(option);
-        }
-        userSuperVisor.append(fragment)
-
-    }
-    fillSelectSuperVisorSelect(getSupervisor);
+ 
+    fillSelectSuperVisorSelect(getSupervisor,userSuperVisor);
  
     let getArticleByBarcode = async (barCode,quantity) => {
         try {
